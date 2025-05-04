@@ -1,0 +1,34 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Transactions</h1>
+
+    <!-- Basic transaction filters -->
+    <div>
+        <a href="?type=all">All</a> |
+        <a href="?type=earnings">Earnings</a> |
+        <a href="?type=spendings">Spendings</a>
+    </div>
+
+    <!-- Simple stats -->
+    <p>Total Earnings: £{{ stats.total_earnings }}</p>
+    <p>Total Spendings: £{{ stats.total_spendings }}</p>
+
+    <!-- List of transactions -->
+    {% if transactions %}
+        <ul>
+        {% for transaction in transactions %}
+            <li>
+                <strong>{{ transaction.pickup_location }} to {{ transaction.dropoff_location }}</strong> –
+                £{{ transaction.amount }}<br>
+                {{ transaction.description }}<br>
+                {{ transaction.created_at }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No transactions available.</p>
+    {% endif %}
+</div>
+{% endblock %}
