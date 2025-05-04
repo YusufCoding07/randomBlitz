@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Request a Ride</h1>
+
+    <!-- Simple ride form -->
+    <form action="{% url 'find_ride' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="pickup_location" placeholder="Pickup" required><br><br>
+        <input type="text" name="destination" placeholder="Destination" required><br><br>
+        <button type="submit">Request Ride</button>
+    </form>
+
+    <!-- List of available rides -->
+    <h2 class="mt-5">Available Rides</h2>
+    {% for ride in rides %}
+    <div class="ride">
+        <p>Driver: {{ ride.driver.username }}</p>
+        <p>From: {{ ride.start_location }} → {{ ride.end_location }}</p>
+        <p>Fare: £{{ ride.fare }}</p>
+        <button>Request</button>
+    </div>
+    {% empty %}
+    <p>No rides found.</p>
+    {% endfor %}
+
+    <!-- Nearby rides for authenticated users -->
+    {% if user.is_authenticated %}
+        <h3 class="mt-5">Nearby Rides</h3>
+        {% for ride in nearby_rides %}
+            <div class="nearby-ride">
+                <p>{{ ride.pickup_location }} → {{ ride.dropoff_location }}</p>
+                <p>£{{ ride.amount }}</p>
+                {% if user != ride.user %}
+                    <a href="{% url 'accept_ride' ride.id %}">Accept</a>
+                {% else %}
+                    <span>Your Ride</span>
+                {% endif %}
+            </div>
+        {% empty %}
+        <p>No nearby rides available.</p>
+        {% endfor %}
+    {% else %}
+        <p class="mt-4">Log in to see nearby rides.</p>
+    {% endif %}
+</div>
+{% endblock %}
