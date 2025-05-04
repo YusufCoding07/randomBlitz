@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Find a Ride</h1>
+
+    <!-- Basic search form -->
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Simple ride list rendering -->
+    {% if rides %}
+        <h2 class="mt-4">Available Rides</h2>
+        <ul>
+            {% for ride in rides %}
+                <li>
+                    {{ ride.pickup_location }} → {{ ride.dropoff_location }} — £{{ ride.amount }}
+                    {% if ride.user.id == user.id %}
+                        <strong>(Your Ride)</strong>
+                    {% else %}
+                        <a href="{% url 'accept_ride' ride.id %}">Accept</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="mt-4">No rides found.</p>
+    {% endif %}
+</div>
+{% endblock %}
