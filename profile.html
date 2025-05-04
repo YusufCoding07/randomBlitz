@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">User Profile</h2>
+
+    <!-- Basic profile section -->
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <img src="{% static 'default.png' %}" class="rounded-circle mb-3" style="width: 100px;">
+            <h4>{{ user.username }}</h4>
+            <p>{{ user.email }}</p>
+            <button class="btn btn-primary">Edit Profile</button>
+        </div>
+    </div>
+
+    <!-- Simple balance summary -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Balance Summary</h5>
+            <p>Earnings: £{{ stats.total_earnings|default:"0.00" }}</p>
+            <p>Spendings: £{{ stats.total_spendings|default:"0.00" }}</p>
+        </div>
+    </div>
+
+    <!-- Basic recent transactions list -->
+    <div class="card">
+        <div class="card-body">
+            <h5>Recent Transactions</h5>
+            {% if transactions %}
+                <ul>
+                    {% for transaction in transactions %}
+                        <li>
+                            {{ transaction.pickup_location }} → {{ transaction.dropoff_location }}: 
+                            £{{ transaction.amount }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No transactions found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
