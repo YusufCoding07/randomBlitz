@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Create Ride</h2>
+    
+    <!-- Basic ride creation form -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Ride</button>
+    </form>
+</div>
+{% endblock %}
